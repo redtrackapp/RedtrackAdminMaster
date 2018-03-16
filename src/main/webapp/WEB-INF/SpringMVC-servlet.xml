@@ -1,0 +1,65 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context		http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc	http://www.springframework.org/schema/mvc/spring-mvc.xsd 
+        http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+ 		http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<mvc:annotation-driven />
+	<context:component-scan base-package="com.dbs" />
+
+
+	<bean id="employeeDAOImpl" class="com.dbs.redtrackadmin.integration.dao.impl.EmployeeDAOImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	<bean id="adminViewDAOImpl" class="com.dbs.redtrackadmin.integration.dao.impl.AdminViewDAOImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+		
+	<bean id="incidentDAOImpl" class="com.dbs.redtrackadmin.integration.dao.impl.IncidentDAOImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="userRegistrationDAOImpl" class="com.dbs.redtrackadmin.integration.dao.impl.UserRegistrationDAOImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+		
+	<bean id="adminViewServiceImpl" class="com.dbs.redtrackadmin.business.service.impl.AdminViewServiceImpl">
+	</bean>
+
+	<!-- Database related settings start -->
+	<!-- Detect @Transactional -->
+	<tx:annotation-driven proxy-target-class="true"	transaction-manager="transactionManager" />
+
+	<!-- Transaction Manager -->	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Database Configurations -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://bipredtrackdb.cutguhbkcwjr.ap-southeast-2.rds.amazonaws.com/bipredtrackdb" />
+        <property name="username" value="bipredtrack" />
+        <property name="password" value="bipredtrack123" />
+     </bean> 
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- Database related settings end -->
+	
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+		
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/JSP/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	  
+	  	
+</beans>
